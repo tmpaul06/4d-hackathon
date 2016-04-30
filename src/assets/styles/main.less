@@ -1,0 +1,140 @@
+@import (inline) '../../../node_modules/normalize.css/normalize.css';
+@import './grid';
+@import './fonts';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: proxima_nova_rgregular;
+}
+
+.container {
+  &.main {
+    margin-top: 80px;
+  }
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/* For a dark theme, placeholder must be white */
+.dark {
+  ::-webkit-input-placeholder {
+     color: #FFF;
+  }
+
+  :-moz-placeholder { /* Firefox 18- */
+     color: #FFF;
+  }
+
+  ::-moz-placeholder {  /* Firefox 19+ */
+     color: #FFF;
+  }
+
+  :-ms-input-placeholder {
+     color: #FFF;
+  }
+}
+
+.full-height {
+  height: 100% !important;
+}
+
+// Slider CSS
+.bar {
+  position: absolute;
+  left: 0px;
+  right: 934px;
+  height: 5px;
+  border-radius: 5px;
+  top: 25px;
+  background: #CFD8DD;
+}
+
+.bar.bar-1 {
+  background: #5D97F8 !important;
+}
+
+
+// CSS Loader http://codepen.io/simoncla/pen/FBoqA
+.roam-loader-slider {
+  position:relative;
+  width:400px;
+  height: 100%;
+  opacity: 0.8;
+  left: 26%;
+
+  .roam-loader-line{
+    position:absolute;
+    background:#4a8df8;
+    width:400px;
+    height:2px;
+    top: 50%;
+
+  }
+  .roam-loader-break{
+    position:absolute;
+    background:#DFDFDF;
+    width:4px;
+    top: 50%;
+    height:2px;
+  }
+
+  .roam-loader-dot1{ animation: loading 3s infinite;}
+  .roam-loader-dot2{ animation: loading 3s 0.5s infinite; }
+  .roam-loader-dot3{ animation: loading 3s 1s infinite; }
+
+}
+
+@keyframes loading {
+ from { left: 0; }
+ to { left: 400px; }
+}
+
+// Spinner icon
+.spinner-icon {
+  animation: rotate 0.8s infinite linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// product hierarchy list
+li.list-item-hierarchy:not(:last-child):after {
+  content: "\203A";
+  margin-left: 7px;
+  vertical-align: middle;
+}
+
+
+#vis-graph-container {
+  canvas {
+    background: #29292B;
+    background: -moz-radial-gradient(center, ellipse cover, #29292B 0%, #151515 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, #29292B 0%,#151515 100%);
+    background: radial-gradient(ellipse at center, #29292B 0%,#151515 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29292B', endColorstr='#151515',GradientType=1 );
+  }
+}

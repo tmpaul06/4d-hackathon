@@ -1,0 +1,25 @@
+# Mac stuff
+.DS_Store
+
+# NPM and dependency objects
+npm-debug.log*
+/node_modules
+/bower_components
+
+# Auto-created files
+dist/*
+build/*
+release/*
+
+# Temporary files
+tmp
+
+# Sublime Text
+*sublime-workspace
+*.sublime-project
+
+# Webstorm
+.idea/
+
+*.diff
+dist.tgz
