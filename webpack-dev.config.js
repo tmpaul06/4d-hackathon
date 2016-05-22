@@ -10,7 +10,7 @@ module.exports = {
       "webpack/hot/only-dev-server",
       path.join(__dirname, "src/app/App.jsx")
     ],
-    vendor: [ "d3", "react", "react-dom", "superagent" ]
+    vendor: [ "react", "react-dom" ]
   },
   node: {
     fs: "empty"
@@ -22,7 +22,6 @@ module.exports = {
       "react": path.resolve(__dirname, "node_modules/react"),
       "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
       "react-router": path.resolve(__dirname, "node_modules/react-router"),
-      "@roam/react-shared": path.resolve(__dirname, "../react-shared/src"),
       "assets": path.resolve(__dirname, "src/assets")
     },
     root: path.resolve(__dirname, "src/app")
@@ -44,7 +43,7 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style-loader!css-loader" },
       { test: /\.(js|jsx)$/, loaders: [ "react-hot", "babel-loader" ], 
-        include: [ path.join(__dirname, "src"), path.resolve(__dirname, "../react-shared/src") ] },
+        include: [ path.join(__dirname, "src") ] },
       { test: /\.less$/, loader: "style!css!less" },
       { test: /\.json$/, loader: "json-loader" },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },

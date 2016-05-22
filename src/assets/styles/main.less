@@ -138,3 +138,62 @@ li.list-item-hierarchy:not(:last-child):after {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29292B', endColorstr='#151515',GradientType=1 );
   }
 }
+
+.sidemenu {
+  position: fixed;
+  width: 30%;
+  background: #EAE9E9;
+  color: #656464;
+  height: 100%;
+  right: 0;
+  border: 1px solid #ECECEC;
+  padding: 20px;
+}
+
+ul.stack, ul li.stack-item {
+-webkit-transform: scaleY(-1);
+   -moz-transform: scaleY(-1);
+    -ms-transform: scaleY(-1);
+     -o-transform: scaleY(-1);
+        transform: scaleY(-1);
+
+}
+
+ul.stack {
+  overflow-y: scroll;
+  height: 90%;
+  list-style: none;
+  padding: 0px;
+}
+
+li.stack-item {
+    zoom: 1;
+    border: 1px solid #C3C3C3;
+    margin: 5px 20px;
+    padding: 10px;
+}
+
+.stack-number {
+  position: absolute;
+  background: gray;
+  padding: 1px 7px;
+  border-radius: 50%;
+  color: #FFF;
+  font-size: 13px
+}
+
+.canvas-layer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+
+    & canvas {
+      background: transparent;
+    }
+}
+
+.stack-attr {
+  margin: 5px 10px;
+  display: inline-block;
+}
