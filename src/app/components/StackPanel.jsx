@@ -23,7 +23,7 @@ export default class StackPanel extends React.Component {
           return (
             <span key={i} className="one column" style={{
               cursor: "pointer"
-            }} onClick={this.props.onShapeClick.bind(null, shape.shape)}>
+            }} onClick={() => this.props.onShapeClick(shape.shape)}>
               <i className={shape.icon}/>
             </span>
           );

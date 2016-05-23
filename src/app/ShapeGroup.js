@@ -4,6 +4,7 @@ export default class ShapeGroup {
 
   constructor() {
     this.attributes = {};
+    this.transforms = [];
   }
 
   defineAttrs() {
@@ -11,6 +12,11 @@ export default class ShapeGroup {
     // e.g x, y, r or width, height. Each attribute must be associated
     // with a default value.
   }
+
+  getRangeFor(attrName) {
+
+  }
+
   getAttrs() {
     // Return a list of attribute and value pairs.
     // An attribute can have either a static property
@@ -21,14 +27,22 @@ export default class ShapeGroup {
     return Object.keys(this.attributes).map((attrName) => {
       return {
         name: attrName,
-        value: this.attributes[attrName] 
+        value: this.attributes[attrName],
+        decimalAllowed: attrName === "rotate" ? true : false,
+        range: this.getRangeFor(attrName) || [ 0, 100 ]
       };
     });
   }
 
   setVariableBinding(attribute, path) {
-    this.attributes[attribute] = function() {
-      return DataStore.get(path);
-    };
+  }
+
+  clone() {
+    let newObj = new this.constructor();
+    newObj.attributes = Object.assign({}, this.attributes);
+    newObj.transforms = this.transforms.map(function(t) {
+      return Object.assign({}, t);
+    });
+    return newObj;
   }
 }
