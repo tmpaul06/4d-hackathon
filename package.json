@@ -49,7 +49,9 @@
     "normalize.css": "3.0.3",
     "react": "0.14.2",
     "react-addons-clone-with-props": "0.14.2",
+    "react-color": "^2.1.0",
     "react-dom": "0.14.2",
+    "react-input-range": "^0.8.0",
     "react-router": "1.0.0-rc3",
     "scroll-behavior": "0.2.0",
     "superagent": "1.2.0"

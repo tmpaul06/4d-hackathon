@@ -1,19 +1,21 @@
 import ShapeGroup from "../ShapeGroup";
 import DataStore from "../DataStore";
+import { extend } from "../utils/ObjectUtils";
 
 export default class RectShapeGroup extends ShapeGroup {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.attributes = {
       x: Math.floor(DataStore.get([ "global", "WIDTH" ]) / 2) - 200,
       y: Math.floor(DataStore.get([ "global", "HEIGHT" ]) / 2),
       width: 20,
-      height: 20,
+      height: 100,
       rotate: 0,
       fillStyle: "#000",
       strokeStyle: "#000",
       alpha: 1
     };
+    this.attributes = extend(this.attributes, props);
     this.transforms = [ {
       type: "rotate",
       value: (self) => {
@@ -34,17 +36,18 @@ export default class RectShapeGroup extends ShapeGroup {
     }
   }
 
-  renderToCanvas(ctx, timeElapsed) {
+  renderToCanvas(ctx, timeElapsed, props) {
+    let attrs = extend(this.attributes, props);
     // For a rectangle, get the x and y positions, and width and height
-    Object.keys(this.attributes).forEach((attrName) => {
-      let attr = this.attributes[attrName];
+    Object.keys(attrs).forEach((attrName) => {
+      let attr = attrs[attrName];
       if (typeof attr === "function") {
-        this.attr[attrName] = attr(timeElapsed, DataStore.get);
+        attrs[attrName] = attr(timeElapsed, DataStore.get);
       }
     });
     ctx.save();
-    ctx.translate(this.attributes.x + this.attributes.width / 2,
-          this.attributes.y + this.attributes.height / 2);
+    ctx.translate(attrs.x,
+          attrs.y);
     // If there are any transforms defined, use the transforms
     this.transforms.forEach((transform) => {
       // If translate, translate the midpoint.
@@ -56,7 +59,6 @@ export default class RectShapeGroup extends ShapeGroup {
         } else {
           x = transform.value[0], y = transform.value[1];
         }
-        ctx.translate(x, y);
       } else if (transform.type === "rotate") {
         let angle;
         if (typeof transform.value === "function") {
@@ -65,9 +67,9 @@ export default class RectShapeGroup extends ShapeGroup {
         ctx.rotate(angle);
       }
     });
-    ctx.fillStyle = this.attributes.fillStyle;
-    ctx.strokeStyle = this.attributes.strokeStyle;
-    ctx.fillRect(-this.attributes.width / 2, -this.attributes.height / 2, this.attributes.width, this.attributes.height);
+    ctx.fillStyle = attrs.fillStyle;
+    ctx.strokeStyle = attrs.strokeStyle;
+    ctx.fillRect(-attrs.width / 2, -attrs.height / 2, attrs.width, attrs.height);
     ctx.restore();
   }
 }

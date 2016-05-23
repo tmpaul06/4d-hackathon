@@ -1,32 +1,58 @@
 import React from "react";
-import Stack from "./Stack";
-import DataStore from "../DataStore";
+import StackGroup from "./StackGroup";
+
+function throttle(fn, threshhold, scope) {
+  threshhold || (threshhold = 250);
+  var last,
+      deferTimer;
+  return function () {
+    var context = scope || this;
+
+    var now = +new Date,
+        args = arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
 
 export default class SideMenu extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentShapeIndex: undefined
+    };
+    // this.renderCurrentShape = throttle(this.renderCurrentShape.bind(this), 16);
   }
 
   render() {
-    let layer = this.props.currentLayer;
-    let stacks = layer ? (layer.stacks) || [] : [];
+    let shapes = this.props.shapes || []; 
     return (
       <div className="sidemenu">
         <div>
-          <span onClick={() => this.cloneStack()}>CLONE LAST</span>
+          SHAPE LIST
         </div>
         <ul className="stack">
-          {stacks.map((stack, i) => {
+          {shapes.map((shape, i) => {
             return (
               <li style={{
                 minHeight: 100
               }} className="stack-item" key={i}>
-                <span className="stack-number">{stack.id}</span>
-                <Stack
-                  _dPath={this.props._dPath.concat([ "stacks", i ])}
-                  onAttrValueChange={(g, a, v) =>
-                   this.props.onAttrValueChange(layer, i, g, a, v)}
-                  stack={stack} onAddGroup={this.handleAddGroup.bind(this, layer, i)}/>
+                <span className="stack-number">{i}</span>
+                <StackGroup
+                  animateShape={this.animateShape.bind(this)}
+                  open={this.state.currentShapeIndex === i}
+                  attrValueChange={this.handleAttributeValueChange.bind(this)}
+                  onSelect={this.handleShapeSelect.bind(this, i)}
+                  shape={shape}/>
               </li>
             );
           })}
@@ -35,19 +61,60 @@ export default class SideMenu extends React.Component {
     );
   }
 
-  handleAddGroup(layer, i, group) {
-    this.props.handleAddGroup(layer, i, group);
+  componentDidMount() {
+    let canvas = document.getElementById("shape-editor");
+    let context = canvas.getContext("2d");
+    this.context = context;
+    this.canvas = canvas;
   }
 
-  cloneStack() {
-    let stacks = this.props.currentLayer.stacks;
-    let lastStack = stacks[stacks.length - 1];
-    let newStack = {
-      id: lastStack.id + 1,
-      groups: lastStack.groups.map(function(g) {
-        return g.clone();
-      })
-    };
-    DataStore.set(this.props._dPath.concat([ "stacks", stacks.length ]), newStack);
+  componentDidUpdate() {
+    this.renderCurrentShape(this.props.shapes[this.state.currentShapeIndex]);
+  }
+
+  animateShape(shape, stop) {
+    if (this.animId !== undefined && stop === undefined) {
+      this.stopAnimation();
+      this.animId = undefined;
+      return;
+    }
+    let id = window.requestAnimationFrame((t) => {
+      this.renderCurrentShape(shape, t);
+      this.animateShape(shape, false);
+    });
+    this.animId = id;
+  }
+
+  stopAnimation() {
+    window.cancelAnimationFrame(this.animId);
+  }
+
+  renderCurrentShape(shape, t = 0) {
+    let canvas = document.getElementById("shape-editor");
+    let context = canvas.getContext("2d");
+    if (shape) {
+      let attrs = shape.props;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      shape.renderToCanvas(context, undefined, t);
+    }
+  }
+
+  handleAttributeValueChange(attr, value) {
+    let currentShape = this.props.shapes[this.state.currentShapeIndex];
+    if (currentShape) {
+      if (typeof value === "number") {
+        value = parseFloat(value.toFixed(1));
+      }
+      console.log(value);
+      currentShape.props[attr.name] = value;
+      this.renderCurrentShape(currentShape);
+      this.forceUpdate();
+    } 
+  }
+
+  handleShapeSelect(shapeIndex) {
+    this.setState({
+      currentShapeIndex: shapeIndex
+    });
   }
 }

@@ -1,3 +1,5 @@
+import Tree from "drawings/Tree";
+
 class DataStore {
 
   constructor() {
@@ -6,13 +8,9 @@ class DataStore {
         WIDTH: 600,
         HEIGHT: 400
       },
-      layers: [ {
-        id: 1,
-        stacks: [ {
-          id: 1,
-          groups: []
-        } ]
-      } ]
+      shapes: [
+        new Tree()
+      ]
     };
     this.callback = function() {};
   }
