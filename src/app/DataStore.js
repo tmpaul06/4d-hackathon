@@ -8,9 +8,12 @@ class DataStore {
         WIDTH: 600,
         HEIGHT: 400
       },
-      shapes: [
-        new Tree()
-      ]
+      page1: {
+        trees: [ {
+          x: 0,
+          y: 1   
+        } ]
+      }
     };
     this.callback = function() {};
   }

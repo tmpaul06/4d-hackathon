@@ -105,7 +105,6 @@ export default class SideMenu extends React.Component {
       if (typeof value === "number") {
         value = parseFloat(value.toFixed(1));
       }
-      console.log(value);
       currentShape.props[attr.name] = value;
       this.renderCurrentShape(currentShape);
       this.forceUpdate();

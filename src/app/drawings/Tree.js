@@ -19,42 +19,46 @@ function random(a, b) {
 
 
 class Tree {
-  constructor() {
-    this.props = {
-      x: 232,
-      y: 400,
-      width: 600,
-      height: 400,
-      initialAngle: 90,
-      heightFraction: 0.66,
-      maxDepth: 6,
-      leftBranchAngle(props) {
-        let diff = props.initialAngle - 90;
-        if (diff > 0) {
-          return 30 + Math.min(diff, 10);
-        }
-        return 30;
-      },
-      rightBranchAngle(props) {
-        let diff = props.initialAngle - 90;
-        if (diff < 0) {
-          return 30 - Math.max(diff, -10);
-        }
-        return 30;
-      },
-      branchFill: "#212121",
-      lineWidth: 10,
-      leafDensity: 100,
-      leafLength: 30,
-      leafFill: "orange",
-      leafOpacity: 1
-    };
+
+  static props = {
+    x: 232,
+    y: 400,
+    width: 600,
+    height: 400,
+    initialAngle: 90,
+    heightFraction: 0.66,
+    maxDepth: 6,
+    leftBranchAngle(props) {
+      let diff = props.initialAngle - 90;
+      if (diff > 0) {
+        return 30 + Math.min(diff, 10);
+      }
+      return 30;
+    },
+    rightBranchAngle(props) {
+      let diff = props.initialAngle - 90;
+      if (diff < 0) {
+        return 30 - Math.max(diff, -10);
+      }
+      return 30;
+    },
+    branchFill: "#212121",
+    lineWidth: 10,
+    leafFill: "orange",
+    leafOpacity: 1
+  };
+
+  constructor(props) {
+    this.id = 1;
+    this.props = extend(Tree.props, props);
     this.name  = "Tree";
     this.step = 0;
   }
 
   getRange(key) {
     switch(key) {
+      case "leafOpacity":
+        return [ 0, 1, 0.1 ];
       case "maxDepth":
         return [ 0, 12, 1 ];
       case "initialAngle":
@@ -92,40 +96,6 @@ class Tree {
     });
   }
 
-  drawBranch(ctx, props, depth) {
-    if (depth < props.maxDepth) {
-      // The branch is represented by a line from 0, 0 to 0, -(h)
-      // where h = height fraction *  total height
-      ctx.beginPath();
-      ctx.moveTo(0,0);
-      ctx.lineTo(0,-(props.height) * props.heightFraction);
-      ctx.stroke();
-
-      // Move coordinate system to that point now
-      ctx.translate(0, -(props.height) * props.heightFraction);
-
-      // Scale coordinate system so that progressive branches are smaller
-      ctx.scale(props.xScale, props.yScale);
-      // Left branch
-      ctx.rotate(-props.leftBranchAngle);
-      ctx.save();
-      this.drawBranch(ctx, props, depth + 1);
-      ctx.restore();
-      // Right branch
-      ctx.rotate(props.rightBranchAngle);
-      ctx.save();
-      this.drawBranch(ctx, props, depth + 1);
-      ctx.restore();
-    } else {
-      // Draw leaves
-      ctx.fillStyle = props.leafFill;
-      ctx.globalAlpha = props.leafOpacity;
-      ctx.fillRect(0, 0, props.leafLength, props.leafDensity);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-    }
-  }
-
   drawLine(ctx, depth, x1, y1, x2, y2, props) {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -151,17 +121,19 @@ class Tree {
         height * props.heightFraction, step, depth - 1);
     } else {
       ctx.strokeStyle = props.leafFill;
+      ctx.globalAlpha = props.leafOpacity;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x1 + random(-2, 0), y1 + random(-2, 0));
       ctx.lineTo(x1 + random(-4, 0), y1 + random(0, 2));
       ctx.lineTo(x1, y1);
       ctx.stroke();
+      ctx.globalAlpha = 1;
     }
   }
 
-  renderToCanvas(ctx, props, timeElapsed) {
-    let newProps = extend(this.props, props);
+  renderToCanvas(ctx, timeElapsed) {
+    let newProps = extend(Tree.props, this.props);
     // Iterate and fetch any DataStore variables that are to be resolved
     Object.keys(newProps).forEach(function(key) {
       let value = newProps[key];

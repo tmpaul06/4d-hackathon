@@ -13,20 +13,17 @@ export default class StackGroup extends React.Component {
       slider: undefined
     };
   }
-
-  animateShape() {
-    this.props.animateShape(this.props.shape);
-  }
  
   render() {
     let shape = this.props.shape;
     let attrs = shape.getAttrs();
     return (
       <div className="group-container">
-        <div className="heading" onClick={() => this.props.onSelect() }>
+        <div style={{
+          background: shape.isTemplate ? "#43AAFF" : "#ECECEC"
+        }} className="heading" onClick={() => this.props.onSelect() }>
           { shape.name }
         </div>
-        <span onClick={() => this.animateShape()}>Animate</span>
         <div className={"stack-group " + (this.props.open ? " open" : "")}>
           {
             /*
