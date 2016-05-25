@@ -4,7 +4,6 @@ export default class TreeLayer {
   constructor(id) {
     this.id = id;
     let newTree = new Tree(1);
-    newTree.isTemplate = true;
     this.shapes = [ newTree ];
   }
 
@@ -14,9 +13,10 @@ export default class TreeLayer {
     this.shapes.push(tree);
   }
 
-  render(ctx, t) {
+  render(ctx, t, shapes) {
+    shapes = shapes || this.shapes;
     // Render each shape into the canvas
-    this.shapes.forEach(function(shape) {
+    shapes.forEach(function(shape) {
       shape.renderToCanvas(ctx, t);
     });
   }

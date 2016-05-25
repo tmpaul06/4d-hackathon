@@ -17,6 +17,7 @@ export default class StackGroup extends React.Component {
   render() {
     let shape = this.props.shape;
     let attrs = shape.getAttrs();
+    shape.boundVars = this.props.boundVars;
     return (
       <div className="group-container">
           <div style={{
@@ -25,6 +26,9 @@ export default class StackGroup extends React.Component {
           }} className="heading" onClick={() => this.props.onSelect() }>
             { shape.name }
           </div>
+          <span onClick={() => this.props.setCurrentTemplate()}>
+            Set as current template
+          </span>
         <div className={"stack-group " + (this.props.open ? " open" : "")}>
           {
             /*

@@ -1,5 +1,6 @@
 import DataStore from "../DataStore";
 import { extend } from "../utils/ObjectUtils";
+import FuncRegistry from "../FuncRegistry";
 
 /*
     Adapted from
@@ -28,35 +29,29 @@ class Tree {
     initialAngle: 90,
     heightFraction: 0.66,
     maxDepth: 6,
-    leftBranchAngle(props) {
-      let diff = props.initialAngle - 90;
-      if (diff > 0) {
-        return 30 + Math.min(diff, 10);
-      }
-      return 30;
-    },
-    rightBranchAngle(props) {
-      let diff = props.initialAngle - 90;
-      if (diff < 0) {
-        return 30 - Math.max(diff, -10);
-      }
-      return 30;
-    },
+    leftBranchAngle: 30,
+    rightBranchAngle: 30,
     branchFill: "#212121",
     lineWidth: 10,
-    leafFill: "orange",
+    leafFill: "#FFA500",
+    leafDisplacement: 2,
     leafOpacity: 1
   };
 
-  constructor(props) {
-    this.id = 1;
-    this.props = extend(Tree.props, props);
+  constructor(id) {
+    this.id = id;
+    this.props = Tree.props;
     this.name  = "Tree";
-    this.step = 0;
   }
 
   getRange(key) {
     switch(key) {
+      case "lineWidth":
+        return [ 10, 30, 5 ];
+      case "leafFill":
+        return [ 0, 360, 5 ];
+      case "leafDisplacement":
+        return [ 1, 5, 1 ];
       case "leafOpacity":
         return [ 0, 1, 0.1 ];
       case "maxDepth":
@@ -85,13 +80,24 @@ class Tree {
     }
   }
 
+  getFunctionProps(value) {
+    let boundVarMap = {};
+    let boundVars = this.boundVars || [];
+    boundVars.forEach(function(v) {
+      boundVarMap[v.name] = v.value;
+    });
+    let timeElapsed = DataStore.get("T");
+    return value(boundVarMap, timeElapsed, FuncRegistry);
+  }
+
   getAttrs() {
     return Object.keys(this.props).map((key) => {
       return {
         name: key,
         range: this.getRange(key),
         type: this.getType(key),
-        value: typeof this.props[key] === "function" ? this.props[key](this.props) : this.props[key]
+        value: typeof this.props[key] === "function" ?
+           this.getFunctionProps(this.props[key]) : this.props[key]
       };
     });
   }
@@ -101,7 +107,7 @@ class Tree {
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.strokeStyle = props.branchFill;
-    ctx.lineWidth = depth * 2;
+    ctx.lineWidth = props.lineWidth * depth / 10;
     ctx.stroke();
   }
 
@@ -124,28 +130,38 @@ class Tree {
       ctx.globalAlpha = props.leafOpacity;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
-      ctx.lineTo(x1 + random(-2, 0), y1 + random(-2, 0));
-      ctx.lineTo(x1 + random(-4, 0), y1 + random(0, 2));
+      let delta = props.leafDisplacement;
+      ctx.lineTo(x1 + random(-delta, 0), y1 + random(-delta, 0));
+      ctx.lineTo(x1 + random(-2 * delta, 0), y1 + random(0, delta));
       ctx.lineTo(x1, y1);
       ctx.stroke();
       ctx.globalAlpha = 1;
     }
   }
 
-  renderToCanvas(ctx, timeElapsed) {
-    let newProps = extend(Tree.props, this.props);
+  renderToCanvas(ctx) {
+    let newProps = extend({}, this.props);
+    let timeElapsed = DataStore.get("T");
     // Iterate and fetch any DataStore variables that are to be resolved
-    Object.keys(newProps).forEach(function(key) {
+    Object.keys(newProps).forEach((key) => {
       let value = newProps[key];
       if (typeof value === "function") {
         // Execute it
-        value = value(newProps, DataStore.get);
+        value = this.getFunctionProps(value);
       }
       newProps[key] = value;
     });
-    this.step = (timeElapsed / 16) * ((Math.PI / 80) % Math.PI);
+    let step = (timeElapsed / 16) * ((Math.PI / 80) % Math.PI);
     this.drawTree(ctx, newProps, newProps.x, newProps.y, newProps.initialAngle, 
-      newProps.height / 4, this.step, newProps.maxDepth);
+      newProps.height / 4, step, newProps.maxDepth);
+  }
+
+  clone(id) {
+    // Create a copy of this tree, with new id, and a copy of its properties
+    // with bindings.
+    let clone = new Tree(this.id + "-" + id);
+    clone.props = extend({}, this.props);
+    return clone;
   }
 }
 

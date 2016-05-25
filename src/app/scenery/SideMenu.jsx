@@ -1,12 +1,15 @@
 import React from "react";
 import StackGroup from "components/StackGroup";
 import BindingDroppable from "components/BindingDroppable";
+import ListBindingDroppable from "components/ListBindingDroppable";
+import tinycolor from "tinycolor2";
 
 export default class SideMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentShapeIndex: undefined
+      currentShapeIndex: undefined,
+      selectedTemplate: undefined
     };
   }
 
@@ -23,13 +26,39 @@ export default class SideMenu extends React.Component {
     if (typeof v === "number") {
       v = parseFloat(v.toFixed(2));
     }
-    if (currentShape.isTemplate) {
-      currentShape.constructor.props[attr.name] = v;
+    if (attr.type === "color" && typeof v === "function") {
+      // Get hsva from hex
+      let originalV = v;
+      let originalColor = currentShape.props[attr.name];
+      v = function(...args) {
+        let result = originalV(...args);
+        // Use result to linearly get
+        let colorValue = tinycolor(originalColor);
+        colorValue = colorValue.toHsv();
+        // Use result as hue
+        let r = tinycolor({
+          h: Math.floor(result),
+          s: colorValue.s,
+          v: colorValue.v
+        });
+        return r.toHexString();
+      };
     }
     currentShape.props[attr.name] = v;
     currentLayer.shapes[this.state.currentShapeIndex] = currentShape;
     this.props.updateLayer(currentLayer);
     this.forceUpdate();
+  }
+
+  setCurrentTemplate(index) {
+    let currentLayer = this.props.currentLayer;
+    let shapes = currentLayer.shapes || [];
+    let shape = shapes[index];
+    if (shape) {
+      this.setState({
+        selectedTemplate: shape
+      });
+    }
   }
 
   render() {
@@ -53,6 +82,9 @@ export default class SideMenu extends React.Component {
             );
           })}
         </ul>
+        <div>
+          TEMPLATES
+        </div>
         <ul className="stack">
           {shapes.map((shape, i) => {
             return (
@@ -64,12 +96,19 @@ export default class SideMenu extends React.Component {
                 <StackGroup
                   open={this.state.currentShapeIndex === i}
                   attrValueChange={this.handleAttributeValueChange.bind(this)}
+                  setCurrentTemplate={this.setCurrentTemplate.bind(this, i)}
                   onSelect={this.handleShapeSelect.bind(this, i)}
                   shape={shape}/>
                 </BindingDroppable>
               </li>
             );
           })}
+          <div>
+            SHAPELIST
+            <ListBindingDroppable
+              updateShapes={(shapes) => this.props.updateLayer(currentLayer, shapes, true)}
+              template={this.state.selectedTemplate}/>
+          </div>
         </ul>
       </div>
     );

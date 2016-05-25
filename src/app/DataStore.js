@@ -4,6 +4,7 @@ class DataStore {
 
   constructor() {
     this.cache = {
+      T: 0,
       global: {
         WIDTH: 600,
         HEIGHT: 400
@@ -11,10 +12,18 @@ class DataStore {
       page1: {
         trees: [ {
           x: 0,
-          y: 1,
-          a: 3,
-          b: 4,
-          c: 5  
+          y: 0 
+        }, 
+        {
+          x: 1,
+          y: 0 
+        },
+        {
+          x: 2,
+          y: 0 
+        }, {
+          x: 3,
+          y: 0
         } ]
       }
     };

@@ -42,11 +42,13 @@ export default class SceneryPage extends React.Component {
     });
   }
 
-  updateLayer(layer) {
+  updateLayer(layer, shapes, clear) {
     let canvas = this.refs["canvas" + layer.id];
     let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    layer.render(ctx, 0);
+    if (!clear) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    layer.render(ctx, 0, shapes);
   }
 
   render() {

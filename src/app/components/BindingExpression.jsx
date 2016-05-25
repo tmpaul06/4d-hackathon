@@ -45,16 +45,17 @@ export default class BindingExpression extends React.Component {
     });
     // Parse the value
     let boundParams = regexMatch(value, /\{(\w+)\}/g);
+    // Replace function calls
+    let funcCalls = regexMatch(value, /(\w+)\s*\(.*\)/g);
+    funcCalls.forEach(function(funcName) {
+      value = value.replace(funcName, "funcRegistry." + funcName);
+    });
     let obj = {};
     boundParams.forEach(function(p) {
       obj[p] = boundVarMap[p];
-      value = value.replace("{" + p + "}", "this." + p);
+      value = value.replace("{" + p + "}", "obj." + p);
     });
-    try {
-      let result = evalInContext(value, obj);
-      this.props.onChange(result);
-    } catch (e) {
-      console.log(e);
-    }
+    value = new Function("obj", "T", "funcRegistry", "return " + value);
+    this.props.onChange(value);
   }
 }
