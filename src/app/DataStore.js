@@ -63,7 +63,7 @@ class DataStore {
 
   set(path = [], value) {
     this.cache = this.recursiveSet(this.cache, path, value);
-    this.callback([ this.cache.layers[path[1]] ]);
+    this.callback();
     // let data = this.cache;
     // let len = path.length;
     // let cacheFragments = [];

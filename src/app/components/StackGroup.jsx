@@ -13,6 +13,10 @@ export default class StackGroup extends React.Component {
       slider: undefined
     };
   }
+
+  componentDidUpdate() {
+    this.props.updateLayer();
+  }
  
   render() {
     let shape = this.props.shape;

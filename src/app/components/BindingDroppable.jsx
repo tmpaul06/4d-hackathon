@@ -25,9 +25,6 @@ export default class BindingDroppable extends React.Component {
     }
     let value = DataStore.get(path);
     if (!value) {
-      this.setState({
-        bindPath: undefined
-      });
       return [];
     }
     Object.keys(value).forEach(function(k) {
@@ -51,6 +48,31 @@ export default class BindingDroppable extends React.Component {
     }
   }
 
+  changeBoundVar(boundVar, e) {
+    if (boundVar.name === "listIndex") {
+      if (e.altKey) {
+        let keyCode = e.keyCode;
+        let value = boundVar.value;
+        if (keyCode === 45) {
+          // minus
+          value = value - 1;
+        } else if (keyCode === 43) {
+          // plus
+          value = value + 1;
+        }
+        let path = this.state.bindPath.split(".");
+        path.splice(path.length - 1, 1);
+        let arrValue = DataStore.get(path);
+        if (parseInt(value) >= arrValue.length || parseInt(value) < 0) {
+          return;
+        }
+        this.setState({
+          bindPath: path.join(".") + "." + value
+        });
+      }
+    }
+  }
+
   render() {
     let boundVars = this.getBoundVars(this.state.bindPath);
     return (
@@ -68,6 +90,12 @@ export default class BindingDroppable extends React.Component {
             <span key={i} className="bindable-var">
               <span data-path={this.state.bindPath + "." + boundVar.name}
                 className="stack-attr bindable-var-label">{boundVar.name}</span>
+              {/*boundVar.name === "listIndex" ? (
+                <input className="stack-attr"
+                  type="number"
+                  onChange={(e) => this.changeBoundVar(boundVar, e.target.value)}
+                  value={boundVar.value}/>
+              ) : <span className="stack-attr">{boundVar.value}</span>*/}
               <span className="stack-attr">{boundVar.value}</span>
             </span>
           );

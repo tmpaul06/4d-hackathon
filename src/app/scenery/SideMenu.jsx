@@ -94,6 +94,7 @@ export default class SideMenu extends React.Component {
                 <span className="stack-number">{i + 1}</span>
                 <BindingDroppable>
                 <StackGroup
+                  updateLayer={() => this.props.updateLayer(this.props.currentLayer)}
                   open={this.state.currentShapeIndex === i}
                   attrValueChange={this.handleAttributeValueChange.bind(this)}
                   setCurrentTemplate={this.setCurrentTemplate.bind(this, i)}

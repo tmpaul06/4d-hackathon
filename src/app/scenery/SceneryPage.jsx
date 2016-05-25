@@ -3,6 +3,7 @@ import DataStore from "DataStore";
 import TreeLayer from "./layers/TreeLayer";
 import SideMenu from "./SideMenu";
 import DataStoreView from "components/DataStoreView";
+import AnimationBar from "components/AnimationBar";
 
 export default class SceneryPage extends React.Component {
   constructor(props) {
@@ -10,6 +11,10 @@ export default class SceneryPage extends React.Component {
     this.state = {
       layers: [ new TreeLayer(1) ],
       currLayerInd: 0
+    };
+    DataStore.callback = () => {
+      this.forceUpdate();
+      this.renderLayers();
     };
   }
 
@@ -54,31 +59,33 @@ export default class SceneryPage extends React.Component {
   render() {
     return (
        <div>
-        <h3>{"<SceneryPage/>"}</h3>
-        <DataStoreView/>
-        {
-          /*
-            Draw a canvas for each layer
-           */
-        }
-        {this.state.layers.map((layer, i) => {
-          return (
-            <div key={layer.id} className="row canvas-layer" style={{
-              zIndex: i
-            }}>
-              <div className="twelve columns">
-                <canvas ref={"canvas" + layer.id} id={"layer" + layer.id}
-                  width={DataStore.cache.global.WIDTH}
-                  height={DataStore.cache.global.HEIGHT}>
-                </canvas>
+        <AnimationBar/>
+        <div>
+          <DataStoreView/>
+          {
+            /*
+              Draw a canvas for each layer
+             */
+          }
+          {this.state.layers.map((layer, i) => {
+            return (
+              <div key={layer.id} className="row canvas-layer" style={{
+                zIndex: i
+              }}>
+                <div className="twelve columns">
+                  <canvas ref={"canvas" + layer.id} id={"layer" + layer.id}
+                    width={DataStore.cache.global.WIDTH}
+                    height={DataStore.cache.global.HEIGHT}>
+                  </canvas>
+                </div>
               </div>
-            </div>
-          );
-        })}
-        <SideMenu layers={this.state.layers}
-          updateLayer={this.updateLayer.bind(this)}
-          setCurrentLayer={this.setCurrentLayer.bind(this)}
-          currentLayer={this.state.layers[this.state.currLayerInd]}/>
+            );
+          })}
+          <SideMenu layers={this.state.layers}
+            updateLayer={this.updateLayer.bind(this)}
+            setCurrentLayer={this.setCurrentLayer.bind(this)}
+            currentLayer={this.state.layers[this.state.currLayerInd]}/>
+        </div>
       </div>
     );
   }

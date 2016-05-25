@@ -119,11 +119,19 @@ class Tree {
       this.drawLine(ctx, depth, x1, y1, x2, y2, props);
 
       height = props.heightFraction * height;
+      let leftAngle = props.leftBranchAngle;
+      let rightAngle = props.rightBranchAngle;
+      if (props.initialAngle < 90) {
+        rightAngle += Math.min((90 - props.initialAngle), 10);
+      }
+      if (props.initialAngle > 90) {
+        leftAngle += Math.min((props.initialAngle - 90), 10);
+      }
       this.drawTree(ctx, props, x2, y2, angle - 3 * Math.sin(step),
         height, step, depth - 1);
-      this.drawTree(ctx, props, x2, y2, angle + props.leftBranchAngle,
+      this.drawTree(ctx, props, x2, y2, angle + leftAngle,
         height * props.heightFraction, step, depth - 1);
-      this.drawTree(ctx, props, x2, y2, angle - props.rightBranchAngle,
+      this.drawTree(ctx, props, x2, y2, angle - rightAngle,
         height * props.heightFraction, step, depth - 1);
     } else {
       ctx.strokeStyle = props.leafFill;
