@@ -5,6 +5,18 @@ function evalInContext(js, context) {
     return function() { return eval(js); }.call(context);
 }
 
+function regexMatch(str, regex) {
+  let m;
+  let matches = [];
+  do {
+    m = regex.exec(str);
+    if (m) {
+      matches.push(m[1]);
+    }
+  } while (m);
+  return matches;
+}
+
 export default class BindingExpression extends React.Component {
   constructor(props) {
     super(props);
@@ -12,15 +24,37 @@ export default class BindingExpression extends React.Component {
 
   render() {
     return (
-      <div className="slider">
-        <input ref="input"/>
-        <i onClick={() => this.evaluateExpression()} className="fa fa-check"/>
+      <div className="slider binding-expression">
+        <input className="binding-expression-input" ref="input"/>
+        <i onClick={() => this.evaluateExpression()} style={{
+          float: "none",
+          color: "#8BC34A",
+          position: "relative",
+          right: -60
+        }} className="fa fa-check"/>
       </div>
     );
   }
 
   evaluateExpression() {
     let value = this.refs.input.value;
-    evalInContext(value, this.props.shape);
+    let boundVars = this.props.boundVars || [];
+    let boundVarMap = {};
+    boundVars.forEach(function(v) {
+      boundVarMap[v.name] = v.value;
+    });
+    // Parse the value
+    let boundParams = regexMatch(value, /\{(\w+)\}/g);
+    let obj = {};
+    boundParams.forEach(function(p) {
+      obj[p] = boundVarMap[p];
+      value = value.replace("{" + p + "}", "this." + p);
+    });
+    try {
+      let result = evalInContext(value, obj);
+      this.props.onChange(result);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

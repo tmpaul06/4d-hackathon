@@ -1,5 +1,6 @@
 import React from "react";
 import StackGroup from "components/StackGroup";
+import BindingDroppable from "components/BindingDroppable";
 
 export default class SideMenu extends React.Component {
   constructor(props) {
@@ -59,11 +60,13 @@ export default class SideMenu extends React.Component {
                 minHeight: 100
               }} className="stack-item" key={i}>
                 <span className="stack-number">{i + 1}</span>
+                <BindingDroppable>
                 <StackGroup
                   open={this.state.currentShapeIndex === i}
                   attrValueChange={this.handleAttributeValueChange.bind(this)}
                   onSelect={this.handleShapeSelect.bind(this, i)}
                   shape={shape}/>
+                </BindingDroppable>
               </li>
             );
           })}

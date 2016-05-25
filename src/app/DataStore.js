@@ -11,7 +11,10 @@ class DataStore {
       page1: {
         trees: [ {
           x: 0,
-          y: 1   
+          y: 1,
+          a: 3,
+          b: 4,
+          c: 5  
         } ]
       }
     };
@@ -20,6 +23,9 @@ class DataStore {
 
   get(path = []) {
     let data = this.cache;
+    if (typeof path === "string") {
+      path = path.split(".");
+    }
     for(let i = 0, len = path.length; i < len; i++) {
       if (data[path[i]] !== undefined) {
         data = data[path[i]];

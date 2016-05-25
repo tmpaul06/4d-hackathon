@@ -169,12 +169,23 @@ li.stack-item {
 }
 
 .stack-number {
-    position: absolute;
-    /* background: #656363; */
-    padding: 5px 15px;
-    border-radius: 50%;
-    color: #FFF;
-    font-size: 13px;
+  background: #848484;
+  padding: 5px 11px;
+  border-radius: 50%;
+  color: #FFF;
+  font-size: 13px;
+}
+
+.bindable-var {
+  float: left;
+  .bindable-var-label {
+    color: rgb(255, 255, 255);
+    background: rgb(28, 164, 216);
+    padding: 4px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+
 }
 
 .canvas-layer {
@@ -246,4 +257,32 @@ li.stack-item {
   top: 0;
   left: 0;
   z-index:10;
+}
+
+.highlight-droppable {
+  .binding-droppable {
+    color: #0F75CA !important;
+    font-size: 20px;
+    text-align: center;
+  }
+}
+
+.binding-droppable {
+  text-align: center;
+}
+
+.binding-expression-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #ECECEC;
+  color: #009688;
+  font-size: 14px;
+}
+
+.binding-expression {
+  margin: 5px 15px;
+  border: none;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
 }

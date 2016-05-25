@@ -19,11 +19,12 @@ export default class StackGroup extends React.Component {
     let attrs = shape.getAttrs();
     return (
       <div className="group-container">
-        <div style={{
-          background: shape.isTemplate ? "#43AAFF" : "#ECECEC"
-        }} className="heading" onClick={() => this.props.onSelect() }>
-          { shape.name }
-        </div>
+          <div style={{
+            background: shape.isTemplate ? "#43AAFF" : "#ECECEC",
+            textAlign: "center"
+          }} className="heading" onClick={() => this.props.onSelect() }>
+            { shape.name }
+          </div>
         <div className={"stack-group " + (this.props.open ? " open" : "")}>
           {
             /*
@@ -45,6 +46,8 @@ export default class StackGroup extends React.Component {
                 {
                   this.state.binding === attr.name && (
                     <BindingExpression
+                      onChange={(v) => this.props.attrValueChange(attr, v)}
+                      boundVars={this.props.boundVars}
                       shape={shape}
                     />
                   )
