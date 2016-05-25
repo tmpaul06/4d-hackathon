@@ -76,7 +76,7 @@ export default class SideMenu extends React.Component {
               <li style={{
                 minHeight: 100
               }} className="stack-item" key={i}>
-                <i className="fa fa-eye"/>
+                <i onClick={() => this.props.toggleLayerVisibility(i)} className="fa fa-eye"/>
                 <span onClick={() => this.props.setCurrentLayer(i)}>{"Layer " + layer.id}</span>
               </li>
             );

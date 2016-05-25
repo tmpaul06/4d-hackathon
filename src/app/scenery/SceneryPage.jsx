@@ -4,12 +4,13 @@ import TreeLayer from "./layers/TreeLayer";
 import SideMenu from "./SideMenu";
 import DataStoreView from "components/DataStoreView";
 import AnimationBar from "components/AnimationBar";
+import BackgroundTreeLayer from "./layers/BackgroundTreeLayer";
 
 export default class SceneryPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layers: [ new TreeLayer(1) ],
+      layers: [ new BackgroundTreeLayer(2), new TreeLayer(1) ],
       currLayerInd: 0
     };
     DataStore.callback = () => {
@@ -47,13 +48,20 @@ export default class SceneryPage extends React.Component {
     });
   }
 
-  updateLayer(layer, shapes, clear) {
+  updateLayer(layer, shapes, noWipe) {
     let canvas = this.refs["canvas" + layer.id];
     let ctx = canvas.getContext("2d");
-    if (!clear) {
+    if (!noWipe) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     layer.render(ctx, 0, shapes);
+  }
+
+  toggleLayerVisibility(i) {
+    let layer = this.state.layers[i];
+    layer.visible = !layer.visible;
+    this.forceUpdate();
+    this.updateLayer(layer, [], false);
   }
 
   render() {
@@ -82,6 +90,7 @@ export default class SceneryPage extends React.Component {
             );
           })}
           <SideMenu layers={this.state.layers}
+            toggleLayerVisibility={this.toggleLayerVisibility.bind(this)}
             updateLayer={this.updateLayer.bind(this)}
             setCurrentLayer={this.setCurrentLayer.bind(this)}
             currentLayer={this.state.layers[this.state.currLayerInd]}/>

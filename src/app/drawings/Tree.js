@@ -40,7 +40,7 @@ class Tree {
 
   constructor(id) {
     this.id = id;
-    this.props = Tree.props;
+    this.props = extend({}, Tree.props);
     this.name  = "Tree";
   }
 
