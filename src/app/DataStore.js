@@ -9,6 +9,10 @@ class DataStore {
         WIDTH: 600,
         HEIGHT: 400
       },
+      page2: {
+        products: [ {
+        } ]
+      },
       page1: {
         trees: [ {
           x: 0,

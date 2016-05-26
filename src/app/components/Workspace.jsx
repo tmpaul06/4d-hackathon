@@ -1,5 +1,6 @@
 import React from "react";
 import SceneryPage from "scenery/SceneryPage";
+import ProductPage from "product-card/ProductPage";
 import DataStore from "../DataStore";
 
 
@@ -11,7 +12,9 @@ export default class Workspace extends React.Component {
 
   render() {
     return (
-      <SceneryPage/>
+      <div>
+        <ProductPage/>
+      </div>
     );
   }
 }
