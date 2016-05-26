@@ -5,12 +5,13 @@ import SideMenu from "./SideMenu";
 import DataStoreView from "components/DataStoreView";
 import AnimationBar from "components/AnimationBar";
 import BackgroundTreeLayer from "./layers/BackgroundTreeLayer";
+import MountainLayer from "./layers/MountainLayer";
 
 export default class SceneryPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layers: [ new BackgroundTreeLayer(2), new TreeLayer(1) ],
+      layers: [ new MountainLayer(3), new BackgroundTreeLayer(2), new TreeLayer(1) ],
       currLayerInd: 0
     };
     DataStore.callback = () => {
@@ -70,6 +71,7 @@ export default class SceneryPage extends React.Component {
         <AnimationBar/>
         <div>
           <DataStoreView/>
+          <img id="leaf-image" src={require("assets/images/leaf.png")}/>
           {
             /*
               Draw a canvas for each layer
