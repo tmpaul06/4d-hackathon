@@ -7,6 +7,7 @@ import AnimationBar from "components/AnimationBar";
 import DataStoreView from "components/DataStoreView";
 import ProductCardSideMenu from "./ProductCardSideMenu";
 import BindingDroppable from "components/BindingDroppable";
+import ListBindingDroppable from "./ListBindingDroppable";
 import FuncRegistry from "../FuncRegistry";
 
 const TEMPLATE_TABLE = {
@@ -68,14 +69,18 @@ export default class ProductPage extends React.Component {
             </div>
           </div>*/}
           {this.state.viewType === "list" && (
-            <ProductListView
-              templateProps={this.state.templateProps[this.state.selectedTemplate]}
-              productComponent={TEMPLATE_TABLE[this.state.selectedTemplate]}/>
+            <ListBindingDroppable>
+              <ProductListView
+                templateProps={this.state.templateProps[this.state.selectedTemplate]}
+                productComponent={TEMPLATE_TABLE[this.state.selectedTemplate]}/>
+            </ListBindingDroppable>
           )}
           {this.state.viewType === "grid" && (
-            <ProductGridView
-              templateProps={this.state.templateProps[this.state.selectedTemplate]}
-              productComponent={TEMPLATE_TABLE[this.state.selectedTemplate]}/>
+            <ListBindingDroppable>
+              <ProductGridView
+                templateProps={this.state.templateProps[this.state.selectedTemplate]}
+                productComponent={TEMPLATE_TABLE[this.state.selectedTemplate]}/>
+            </ListBindingDroppable>
           )}
           {
             /*
@@ -96,7 +101,9 @@ export default class ProductPage extends React.Component {
 
   handleAttrValueChange(attr, v) {
     let templateProps = this.state.templateProps;
-    templateProps[this.state.selectedTemplate][attr.name] = v;
+    let props = templateProps[this.state.selectedTemplate];
+    props[attr.name] = v;
+    templateProps[this.state.selectedTemplate] = props;
     this.setState({
       templateProps
     });

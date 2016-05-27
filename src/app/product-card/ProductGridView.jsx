@@ -2,33 +2,6 @@ import React from "react";
 import { randomInt } from "../FuncRegistry";
 import { extend } from "utils/ObjectUtils";
 
-let imageArray = [ "bubbles", "rainDrops", "chair" ];
-
-function generateProducts(N) {
-  let products = [];
-  for (let i = 0; i < N; i++) {
-    products.push({
-      name: "Product " + i,
-      imageSrc: imageArray[i % 3],
-      imageWidth: 250,
-      imageHeight: randomInt(150, 300),
-      description: "A very fantastic product to use daily" + imageArray[i % 3]
-    });
-  }
-  return products;
-}
-
-function getGridRepresentation(products, nX) {
-  let productGrid = [];
-  for(let i = 0; i < products.length; i++) {
-    let row = Math.floor(i / nX);
-    let cell = i % nX;
-    productGrid[row] = productGrid[row] || [];
-    productGrid[row][cell] = products[i];
-  }
-  return productGrid;
-}
-
 function getStackedLayout(products, props) {
   // Assume that each product item has the image width, height attributes,
   // as well as content description. The user can override containerWidth
@@ -44,23 +17,26 @@ function getStackedLayout(products, props) {
   // used up
   while(i < products.length) {
     // Push into current row until width is not available anymore
-    let productWidth = products[i].imageWidth + 40;
-    let productHeight = products[i].imageHeight + 40 + products[i].description.length * 2;
+    let productWidth = props.imageWidth;
+    let productHeight = props.imageHeight;
     if (productWidth > availableWidth) {
       row++;
       cell = 0;
-      availableWidth = totalWidth;
+      availableWidth = totalWidth - (productWidth + gridPadding);
     } else {
-      availableWidth -= (productWidth - gridPadding);
+      availableWidth -= (productWidth + gridPadding);
     }
     productGrid[row] = productGrid[row] || [];
+    productGrid[row][cell] = {};
+    let prevLeft = productGrid[row] ? productGrid[row][cell - 1] : productGrid[row][0];
+    let prevUpper = productGrid[row - 1] ? productGrid[row - 1][cell] : productGrid[0][cell];
     productGrid[row][cell] = {
-      left: (cell === 0 ? gridPadding : (productGrid[row][cell - 1].left +
-        productGrid[row][cell - 1].width + gridPadding)), 
-      top: (row === 0 ? gridPadding : (productGrid[row - 1][cell].height +
-        productGrid[row - 1][cell].top + gridPadding)),
-      width: productWidth,
-      height: productHeight
+      left: (cell === 0 ? gridPadding : (prevLeft.left +
+        prevLeft.width + gridPadding)), 
+      top: (row === 0 ? gridPadding : (prevUpper.height +
+        prevUpper.top + gridPadding)),
+      width: props.containerWidth,
+      height: props.containerHeight
     };
     map[i] = productGrid[row][cell];
     cell++;
@@ -69,13 +45,13 @@ function getStackedLayout(products, props) {
   return map;
 }
 
-export default class ProductListView extends React.Component {
+export default class ProductGridView extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    let products = generateProducts(5);
+    let products = this.props.products || [];
     let layout = getStackedLayout(products, this.props.templateProps);
     let ProductComponent = this.props.productComponent;
     return (
@@ -94,10 +70,7 @@ export default class ProductListView extends React.Component {
             }} key={i}>
               <ProductComponent
                 product={p}
-                templateProps={extend(this.props.templateProps, {
-                  imageWidth: p.imageWidth,
-                  imageHeight: p.imageHeight
-                })}     
+                templateProps={this.props.templateProps}     
               />
             </div>
           );

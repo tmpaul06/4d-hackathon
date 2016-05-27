@@ -85,6 +85,11 @@ export default class BindingDroppable extends React.Component {
             }} onClick={(e) => this.handleDrop(e)} className="fa fa-download"/>
           </div>
         )}
+        {boundVars.length !== 0 && (
+          <i className="fa fa-close" onClick={() => this.setState({
+            bindPath: undefined
+          })}/>
+        )}
         {boundVars.map((boundVar, i) => {
           return (
             <span key={i} className="bindable-var">
