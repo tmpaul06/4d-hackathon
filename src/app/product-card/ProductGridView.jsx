@@ -3,7 +3,7 @@ import { randomInt } from "../FuncRegistry";
 import { extend } from "utils/ObjectUtils";
 import DataStore from "../DataStore";
 
-function getStackedLayout(products, props) {
+function getStackedLayout(products, propsArray) {
   // Assume that each product item has the image width, height attributes,
   // as well as content description. The user can override containerWidth
   // if necessary, i.e by providing a bound function. If it is a number, a
@@ -17,6 +17,7 @@ function getStackedLayout(products, props) {
   // Run through each product adding to first row until available width is all
   // used up
   while(i < products.length) {
+    let props = propsArray[i];
     // Push into current row until width is not available anymore
     let productWidth = props.containerWidth;
     let productHeight = props.containerHeight;
@@ -67,7 +68,11 @@ export default class ProductGridView extends React.Component {
 
   render() {
     let products = this.props.products || [];
-    let layout = getStackedLayout(products, this.props.templateProps);
+    // For each product, resolve appropriate templateProps
+    let tPropsArray = products.map((p, i) => {
+      return this.resolveTemplateProps(p, i, this.props.templateProps);
+    });
+    let layout = getStackedLayout(products, tPropsArray);
     let ProductComponent = this.props.productComponent;
     return (
       <div style={{
@@ -75,7 +80,7 @@ export default class ProductGridView extends React.Component {
       }}>
         {ProductComponent && products.map((p, i) => {
           let l = layout[i];
-          let tProps = this.resolveTemplateProps(p, i, this.props.templateProps);
+          let tProps = tPropsArray[i];
           return (
             <div style={{
               position: "absolute",

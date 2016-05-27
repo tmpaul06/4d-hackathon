@@ -24,18 +24,24 @@ export default class ProductPage extends React.Component {
       productDataPath: undefined,
       templateProps: {
         ProductCardDescCoverTemplate: {
-          imageWidth: 50,
-          imageHeight: 50,
-          containerWidth: 200,
-          containerHeight: 150,
+          imageWidth: 220,
+          imageHeight: 220,
+          containerWidth: 390,
+          containerHeight: 470,
+          borderRadius: 30,
           rotate: 15,
           translate: 20
         },
         ProductCardTemplate: {
-          imageWidth: 50,
-          imageHeight: 50,
-          containerWidth: 200,
-          containerHeight: 150
+          imageWidth: 220,
+          imageHeight: 220,
+          containerWidth: 390,
+          containerHeight: 470,
+          binding: {
+            title: undefined,
+            imageUrl: undefined,
+            content: undefined
+          }
         }
       }
     };
@@ -52,7 +58,6 @@ export default class ProductPage extends React.Component {
   render() {
     return (
       <div>
-        <AnimationBar/>
         <DataStoreView/>
         <div className="product-page">
           {
@@ -62,21 +67,42 @@ export default class ProductPage extends React.Component {
           }
           <div>
             <h4>TEMPLATES</h4>
-            <span onClick={() => this.setState({
+            <span className={"product-page-tab " + (this.state.viewType === "list" ? "selected" : "")}
+              onClick={() => this.setState({
               viewType: "list"
             })}>List View</span>
-            <span onClick={() => this.setState({
+            <span className={"product-page-tab " + (this.state.viewType === "grid" ? "selected" : "")} onClick={() => this.setState({
               viewType: "grid"
             })}>Grid View</span>
           </div>
-          <div className="row">
+          <div className="row" style={{
+            margin: "20px 0px"
+          }}>
             <div className="six columns">
               <span onClick={() => this.setState({ 
                 selectedTemplate: "ProductCardTemplate"
-              })}>Template 1</span>
+              })}>
+              <ProductCardTemplate 
+                isTemplate={true}
+                isSelected={this.state.selectedTemplate === "ProductCardTemplate"}
+                onBinding={(a, k) => this.setTemplateBinding("ProductCardTemplate", a, k)}
+                templateProps={
+                this.state.templateProps["ProductCardTemplate"]
+              }/>
+              </span>
+            </div>
+            <div className="six columns">
               <span onClick={() => this.setState({ 
                 selectedTemplate: "ProductCardDescCoverTemplate"
-              })}>Template 2</span>
+              })}>
+              <ProductCardDescCoverTemplate
+                isTemplate={true}
+                isSelected={this.state.selectedTemplate === "ProductCardDescCoverTemplate"}
+                templateProps={
+                  this.state.templateProps["ProductCardDescCoverTemplate"]
+                }
+              />
+              </span>
             </div>
           </div>
           {this.state.viewType === "list" && (
@@ -118,5 +144,15 @@ export default class ProductPage extends React.Component {
     this.setState({
       templateProps
     });
+  }
+
+  setTemplateBinding(template, attr, key) {
+    let templateProps = this.state.templateProps;
+    let props = templateProps[this.state.selectedTemplate];
+    props.binding[attr] = key;
+    templateProps[this.state.selectedTemplate] = props;
+    this.setState({
+      templateProps
+    });  
   }
 }

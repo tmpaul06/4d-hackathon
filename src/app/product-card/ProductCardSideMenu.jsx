@@ -14,6 +14,8 @@ export default class ProductCardSideMenu extends React.Component {
 
   getRange(key) {
     switch(key) {
+      case "borderRadius":
+        return [ 0, 100, 5 ];
       case "rotate":
         return [ 0, 90, 5 ];
       case "translate":
@@ -34,7 +36,7 @@ export default class ProductCardSideMenu extends React.Component {
         value: templateProps[key],
         range: this.getRange(key)
       };
-    });
+    }).filter((a) => a.name !== "binding");
   }
 
   render() {

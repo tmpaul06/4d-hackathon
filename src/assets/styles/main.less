@@ -319,11 +319,17 @@ li.stack-item {
 
   .product-image {
     margin: auto;
+
+    &.template1 {
+      background-size: contain !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
   }
 
   .product-title {
     font-size: 16px;
-    margin: auto;
+    margin: 15px;
   }
 
   .product-description {
@@ -334,9 +340,37 @@ li.stack-item {
   }
 }
 
-.stupid {
-  display: block !important;
-  max-width: 4000px !important;
-  max-height: 2000px !important;
-  transform: none !important;
+
+.product-page-tab {
+    padding: 10px;
+    border: 1px solid #E8E8E8;
+    color: #0095FF;
+    box-shadow: 0px 2px 7px rgba(128, 128, 128, 0.37);
+    display: inline-block;
+    margin: 0px 5px;
+    cursor: pointer;
+
+    &.selected {
+      background: #1E7DD0;
+      border: 1px solid #1D76C1;
+      color: #FFFFFF;
+    }
+}
+
+.vector-heading {
+    color: orange;
+    font-family: roboto;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.vector-desc {
+  
+    font-family: roboto;
+    font-size: 14px;
+    color: gray
+}
+
+.datastore-view > ul {
+  background: transparent !important;
 }
