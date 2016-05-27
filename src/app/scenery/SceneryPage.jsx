@@ -36,8 +36,8 @@ export default class SceneryPage extends React.Component {
   }
 
   setGlobalWidthAndHeight() {
-    DataStore.cache.global.WIDTH = window.innerWidth - 20;
-    DataStore.cache.global.HEIGHT = window.innerHeight - 20;
+    DataStore.cache.global.WIDTH = window.innerWidth;
+    DataStore.cache.global.HEIGHT = window.innerHeight;
     this.forceUpdate(() => {
       this.renderLayers();
     });
