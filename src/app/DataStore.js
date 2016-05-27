@@ -18,6 +18,14 @@ class DataStore {
           name: "Moto G Plus, 4th Gen",
           imageSrc: "motog",
           description: "Great pictures make all the difference. That’s why there’s the new Moto G Plus, 4th Gen. It gives you a 16 MP camera with laser focus and a whole lot more, so you can say goodbye to blurry photos and missed shots. Instantly unlock your phone using your unique fingerprint as a passcode. Get up to 6 hours of power in just 15 minutes of charging, along with an all-day battery. And get the speed you need now and in the future with a powerful octa-core processor."
+        }, {
+          name: "Ruosh Brown Shoes",
+          description: "Look classy and smart by wearing these formal shoes for men from RUOSH. These shoes have a leather upper and a TPR (thermoplastic polyurethane) sole that keeps your feet comfortable. You can team these shoes with formals of your choice to look stylish.",
+          imageSrc: "shoes"
+        }, {
+          name: "Reebook Bts June Backpack",
+          description: "If you’re a backpack person then this black coloured backpack from Reebok is the perfect pick for you. Made from polyester, this backpack will last a long time. Featuring a stylish and capacious design, this backpack will store all your essentials effectively.",
+          imageSrc: "rebook_bag"
         } ],
         productFeatures: [ {
           name: "Best-in-class camera",

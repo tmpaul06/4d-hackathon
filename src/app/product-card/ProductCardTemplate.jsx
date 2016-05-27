@@ -1,4 +1,5 @@
 import React from "react";
+import { getCoverShape } from "./DescriptionCover";
 
 function getImagePath(name) {
   return require("assets/images/" + name + ".jpg");

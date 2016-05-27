@@ -14,6 +14,10 @@ export default class ProductCardSideMenu extends React.Component {
 
   getRange(key) {
     switch(key) {
+      case "rotate":
+        return [ 0, 90, 5 ];
+      case "translate":
+        return [ 0, 100, 10 ];
       case "imageWidth":
       case "imageHeight":
         return [ 20, 800, 10 ];

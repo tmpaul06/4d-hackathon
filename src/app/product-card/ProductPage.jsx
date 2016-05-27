@@ -9,9 +9,11 @@ import ProductCardSideMenu from "./ProductCardSideMenu";
 import BindingDroppable from "components/BindingDroppable";
 import ListBindingDroppable from "./ListBindingDroppable";
 import FuncRegistry from "../FuncRegistry";
+import ProductCardDescCoverTemplate from "./ProductCardDescCoverTemplate";
 
 const TEMPLATE_TABLE = {
-  ProductCardTemplate
+  ProductCardTemplate,
+  ProductCardDescCoverTemplate
 };
 
 export default class ProductPage extends React.Component {
@@ -21,6 +23,14 @@ export default class ProductPage extends React.Component {
       selectedTemplate: "ProductCardTemplate",
       productDataPath: undefined,
       templateProps: {
+        ProductCardDescCoverTemplate: {
+          imageWidth: 50,
+          imageHeight: 50,
+          containerWidth: 200,
+          containerHeight: 150,
+          rotate: 15,
+          translate: 20
+        },
         ProductCardTemplate: {
           imageWidth: 50,
           imageHeight: 50,
@@ -59,15 +69,16 @@ export default class ProductPage extends React.Component {
               viewType: "grid"
             })}>Grid View</span>
           </div>
-          {/*<div className="row">
+          <div className="row">
             <div className="six columns">
-              <ProductCardTemplate 
-              templateProps={this.state.templateProps[this.state.selectedTemplate]}
-              onSelect={() => this.setState({ 
+              <span onClick={() => this.setState({ 
                 selectedTemplate: "ProductCardTemplate"
-              })}/>
+              })}>Template 1</span>
+              <span onClick={() => this.setState({ 
+                selectedTemplate: "ProductCardDescCoverTemplate"
+              })}>Template 2</span>
             </div>
-          </div>*/}
+          </div>
           {this.state.viewType === "list" && (
             <ListBindingDroppable>
               <ProductListView
