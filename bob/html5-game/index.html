@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <style>
+      canvas {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+      canvas#myCanvas {
+        background: linear-gradient(to bottom, #3d2131 0%,#583A5A 49%,#330A2A 100%);
+        z-index: 0;
+      }
+      canvas#trace {
+        background: transparent;
+        z-index: 1;
+      }
+
+      .controls {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 2;
+      }
+
+      #thrustRange {
+        display: none;
+      }
+
+      #maxSteps {
+        display: none
+      }
+      #button {
+        left: 100px;
+        position: relative;
+      }
+
+      p#thrustLabel {
+        margin: 0;
+        position: absolute;
+        top: -12px;
+        color: #fff;
+        font-size: 17px;
+      }
+
+      #button {
+        outline: none;
+        border: none;
+        background: rgba(78, 78, 78, 0.53);
+        padding: 9px;
+        color: #FFF;
+        left: 40px;
+        margin: 10px 0px;
+      }
+
+      input[type=range]{
+          -webkit-appearance: none;
+          margin: 10px 0px;
+      }
+
+      input[type=range]::-webkit-slider-runnable-track {
+          width: 300px;
+          height: 5px;
+          background: #ddd;
+          border: none;
+          border-radius: 3px;
+      }
+
+      input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          border: none;
+          height: 16px;
+          width: 16px;
+          border-radius: 50%;
+          background: goldenrod;
+          margin-top: -4px;
+      }
+
+      input[type=range]:focus {
+          outline: none;
+      }
+
+      input[type=range]:focus::-webkit-slider-runnable-track {
+          background: #ccc;
+      }
+
+    </style>
+  </head>
+  <body>
+<div id="controls" class="controls" style="padding-bottom:10px">
+   <!-- <input type="text" id="thrust" value="" placeholder="Thrust" name="thrust">
+   </input> -->
+  <p id="thrustLabel">0</p>
+   <input onchange="recomputeThrust()" type="range" id="thrustRange" value="0" min="0" max="40" step="0.5"/>
+   <input type="range" value="200" step="20" min="200" max="2000" id="maxSteps" onchange="setMaxSteps()"/>
+   <button type="submit" id="button" onclick="setTraceMode()">Trace</button>
+</div>
+</input>
+    <canvas id="myCanvas" width="1200" height="600">
+    </canvas>
+    <canvas id="trace" width="1200" height="600">
+    </canvas>
+    <script type="text/javascript" src="filters.js">
+    </script>
+    <img id="bob" src="bob.png" width="48" height="48" style="display:none"/>
+    <img id="planet" src="planet13.png" width="48" height="48" style="display:none"/>
+    <script type="text/javascript" src="game.js">
+    </script>
+
+  </body>
+</html>
