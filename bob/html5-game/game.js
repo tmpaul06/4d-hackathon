@@ -170,7 +170,7 @@ var T = 0;
     // Find the closest set of pixels to the given boundary.
     // For these pixels, compute the gradient using Sobel
     // operator, and return the average gradient
-    
+
     var averageGx = 0, averageGy = 0, numX = 0, numY = 0;
     for (var i = 0, len = indices.length; i < len; i+= 1) {
       if (data[indices[i].index] !== 0) {
@@ -204,7 +204,7 @@ var T = 0;
   function handleWorldCollision() {
     // Use a slice of bounding box around player to detect
     // if a foreign pixel is present.
-    
+
     // First use a hit box test. The hit box for the world is a rectangular
     // slab around the player model
     var slabWidth = 2;
@@ -276,14 +276,14 @@ var T = 0;
     } else {
       drawOrbit(prevCoords.x + v.x * dt, prevCoords.y + v.y * dt);
     }
-    drawPlanet(c.xc, c.yc, c.r);
+    drawPlanet(canvas.width * 0.5, canvas.height * 0.5, c.r);
     // Background planets
     for (var i = 0; i < 5; i++) {
       drawPlanet(randomCoords[i].x, randomCoords[i].y, randomCoords[i].r,
        randomCoords[i].color, randomCoords[i].dotColor, elapsed);
     }
     // Home planet
-    drawPlanet(homeX, homeY,30, "#6780A8", "#A49355");
+    drawPlanet(canvas.width * 0.7, canvas.height * 0.8,30, "#6780A8", "#A49355");
     drawTimer();
     collisionHandling();
     collisionHandlingBlackHole();
@@ -294,15 +294,7 @@ var T = 0;
 
   var colors = [ "#D4C4B6", "#549A76", "#A49355" ];
   var dotColors= colors.concat([ "#6780A8", "#F1BA46" ]);
-  for(var i = 0; i < 5; i++) {
-    randomCoords.push({
-      x: randomInt(0, canvas.width),
-      y: randomInt(0, canvas.height),
-      r:randomInt(13, 18),
-      color: colors[i % 3],
-      dotColor: dotColors[(12 - i) % 5]
-    });
-  }
+
 
   var resetTime = 0;
 
@@ -373,11 +365,25 @@ var T = 0;
   }
 
   window.onload = function() {
+    canvas = document.getElementById("myCanvas");
     canvas.width = window.innerWidth - 20;
     canvas.height = window.innerHeight - 10;
+    canvas.setAttribute("width", canvas.width);
+    canvas.setAttribute("height", canvas.height);
     var lineCanvas = document.getElementById("trace");
     lineCanvas.width = canvas.width;
     lineCanvas.height = canvas.height;
+    lineCanvas.setAttribute("width", canvas.width);
+    lineCanvas.setAttribute("height", canvas.height);
+    for(var i = 0; i < 5; i++) {
+      randomCoords.push({
+        x: randomInt(0, canvas.width),
+        y: randomInt(0, canvas.height),
+        r:randomInt(13, 18),
+        color: colors[i % 3],
+        dotColor: dotColors[(12 - i) % 5]
+      });
+    }
     setupGame();
   };
 
@@ -428,7 +434,7 @@ function recomputeThrust() {
 }
 
 
-function drawTimer() 
+function drawTimer()
 {
 ctx.fillStyle = "#FFFFFF";
 ctx.font="15px Arial";
@@ -452,7 +458,7 @@ function collisionHandling()
         var r = Math.sqrt((cx1 - cx2) * (cx1 - cx2) + (cy1 - cy2) * (cy1 - cy2));
         if (r < (playerBBOX.w / 2 + 30)) {
 		ctx.fillText("successfully reached Home", 150,150);
-	
+
 		resetTime = 7000;
         }
 }
@@ -465,10 +471,7 @@ function collisionHandlingBlackHole()
         var r = Math.sqrt((cx1 - cx2) * (cx1 - cx2) + (cy1 - cy2) * (cy1 - cy2));
         if (r < (playerBBOX.w / 2 + 25)) {
 		ctx.fillText("Killed", 150,150);
-	
+
 		resetTime = 7000;
         }
 }
-
-
-
