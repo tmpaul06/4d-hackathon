@@ -1,7 +1,9 @@
 import Tree from "drawings/Tree";
 import { randomInt, random } from "FuncRegistry";
+import DataStore from "../../DataStore";
 
-function drawTree(context, x1, y1, angle, depth) {
+function drawTree(context, x1, y1, angle, depth, maxDepth) {
+  maxDepth = maxDepth || depth;
   if (depth != 0) {
     let BRANCH_LENGTH;
     if (depth < 4) {
@@ -11,10 +13,13 @@ function drawTree(context, x1, y1, angle, depth) {
     }
     let x2 = x1 + (cos(angle) * depth * BRANCH_LENGTH);
     let y2 = y1 + (sin(angle) * depth * BRANCH_LENGTH);
-    
-    drawLine(context, x1, y1, x2, y2, depth);
-    drawTree(context, x2, y2, angle - 10 - depth, depth - 1);
-    drawTree(context, x2, y2, angle + 12 + depth, depth - 1);
+    let thickness = depth * 1.5;
+    if (depth >= maxDepth - 1) {
+      thickness = 25;
+    }
+    drawLine(context, x1, y1, x2, y2, thickness);
+    drawTree(context, x2, y2, angle - 10 - depth, depth - 1, maxDepth);
+    drawTree(context, x2, y2, angle + 12 + depth, depth - 1, maxDepth);
   }
   if (depth < 2) {
     // let img = document.getElementById("leaf-image");
@@ -61,14 +66,16 @@ function deg_to_rad(angle) {
 export default class BackgroundTreeLayer {
   constructor(id) {
     this.id = id;
-    this.visible = true;
+    this.visible = false;
     this.shapes = [];
   }
 
   createTrees(ctx) {
     ctx.strokeStyle = "#2B2B2B";
-    drawTree(ctx, -50, 600, -85, 14);
-    drawTree(ctx, 1200, 600, -90, 13);
+    let h = DataStore.cache.global.HEIGHT;
+    let w = DataStore.cache.global.WIDTH;
+    drawTree(ctx, -50, h, -85, 14);
+    drawTree(ctx, w - 100, h, -90, 13);
   }
 
   render(ctx, t) {

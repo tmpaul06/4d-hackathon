@@ -10,14 +10,19 @@ import MountainLayer from "./layers/MountainLayer";
 export default class SceneryPage extends React.Component {
   constructor(props) {
     super(props);
+    let boundTreeLayer = new TreeLayer(2);
+    boundTreeLayer.shapes = [];
+    boundTreeLayer.visible = false;
     this.state = {
-      layers: [ new MountainLayer(3), new BackgroundTreeLayer(2), new TreeLayer(1) ],
+      layers: [ new MountainLayer(4), new BackgroundTreeLayer(3), boundTreeLayer,  new TreeLayer(1) ],
       currLayerInd: 0
     };
     DataStore.callback = () => {
       this.forceUpdate();
       this.renderLayers();
     };
+    this.animate = this.animate.bind(this);
+    this.stopAnimation = this.stopAnimation.bind(this);
   }
 
   componentDidMount() {
@@ -36,8 +41,8 @@ export default class SceneryPage extends React.Component {
   }
 
   setGlobalWidthAndHeight() {
-    DataStore.cache.global.WIDTH = window.innerWidth;
-    DataStore.cache.global.HEIGHT = window.innerHeight;
+    DataStore.cache.global.WIDTH = document.body.clientWidth || window.innerWidth;
+    DataStore.cache.global.HEIGHT = document.body.clientHeight || window.innerHeight;
     this.forceUpdate(() => {
       this.renderLayers();
     });
@@ -49,29 +54,51 @@ export default class SceneryPage extends React.Component {
     });
   }
 
-  updateLayer(layer, shapes, noWipe) {
+  updateLayer(layer, shapes) {
     let canvas = this.refs["canvas" + layer.id];
     let ctx = canvas.getContext("2d");
-    if (!noWipe) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (shapes) {
+      layer.shapes = shapes;
     }
     layer.render(ctx, 0, shapes);
+  }
+
+  startAnimation() {
+    this.stopAnim = false;
+    this.animate();
+  }
+
+  animate() {
+    window.requestAnimationFrame((t) => {
+      this.renderLayers();
+      // this.forceUpdate();
+      DataStore.cache.T = t;
+      // DataStore.set("T", Math.floor(t / 48));
+      if (!this.stopAnim) {
+        this.animate();
+      }
+    });
+  }
+
+  stopAnimation() {
+    this.stopAnim = true;
+    // (90 - {x} * 4) + (10) * cos(T/600)
   }
 
   toggleLayerVisibility(i) {
     let layer = this.state.layers[i];
     layer.visible = !layer.visible;
     this.forceUpdate();
-    this.updateLayer(layer, [], false);
+    this.updateLayer(layer, undefined, false);
   }
 
   render() {
     return (
        <div>
-        <AnimationBar/>
+        <AnimationBar stopAnimation={this.stopAnimation.bind(this)} animate={() => this.startAnimation()}/>
         <div>
           <DataStoreView/>
-          <img id="leaf-image" src={require("assets/images/leaf.png")}/>
           {
             /*
               Draw a canvas for each layer

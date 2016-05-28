@@ -13,7 +13,7 @@ export default class Workspace extends React.Component {
   render() {
     return (
       <div>
-        <ProductPage/>
+        <SceneryPage/>
       </div>
     );
   }

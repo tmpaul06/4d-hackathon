@@ -19,7 +19,7 @@ function createMountain(ctx, width, height, color, N) {
 export default class MountainLayer {
   constructor(id) {
     this.id = id;
-    this.visible = true;
+    this.visible = false;
     this.shapes = [];
   }
 
