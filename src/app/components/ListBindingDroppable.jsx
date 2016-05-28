@@ -60,18 +60,13 @@ export default class BindingDroppable extends React.Component {
     return (
       <div>
         <hr/>
-        {!values.length && (
+        {(
           <div className="binding-droppable">
             <i style={{
               cursor: "crosshair"
             }} onClick={(e) => this.handleDrop(e)} className="fa fa-download"/>
           </div>
         )}
-        {Template && values.map((value, i) => {
-          return (<div key={i}>
-            {Template.name + " " +  i}
-          </div>);
-        })}
         <hr style={{
           clear: "both"
         }}/>

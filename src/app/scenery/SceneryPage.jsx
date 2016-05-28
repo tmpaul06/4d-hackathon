@@ -13,6 +13,7 @@ export default class SceneryPage extends React.Component {
     let boundTreeLayer = new TreeLayer(2);
     boundTreeLayer.shapes = [];
     boundTreeLayer.visible = false;
+    boundTreeLayer.name = "TreeShapeList";
     this.state = {
       layers: [ new MountainLayer(4), new BackgroundTreeLayer(3), boundTreeLayer,  new TreeLayer(1) ],
       currLayerInd: 0

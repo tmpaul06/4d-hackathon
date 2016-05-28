@@ -91,7 +91,7 @@ export default class SideMenu extends React.Component {
                   className={layer.visible ? "fa fa-eye" : "fa fa-eye-slash"}/>
                 <span style={{
                   margin: "0px 10px"
-                }} onClick={() => this.props.setCurrentLayer(i)}>{layer.constructor.name}</span>
+                }} onClick={() => this.props.setCurrentLayer(i)}>{layer.name || layer.constructor.name}</span>
               </li>
             );
           })}
