@@ -57,7 +57,7 @@ export default class ProductPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="no-top-margin">
         <DataStoreView/>
         <div className="product-page">
           {

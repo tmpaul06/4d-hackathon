@@ -43,6 +43,7 @@ export default class DataStoreView extends React.Component {
     let dataStorestyle = !this.state.status ? { display: "none" } : {};
     return (
       <div className="datastore-view">
+      <div className="datastore-container" style={dataStorestyle}>
       <JSONTree
         theme={theme}
         isLightTheme={true}
@@ -68,7 +69,8 @@ export default class DataStoreView extends React.Component {
           </span>
         )}
         />
-        {(<i className="fa fa-bars" style={this.getStyle().iconStyle} aria-hidden="true" onClick={this.handleDataStorView.bind(this)}></i>)}
+        </div>
+        {(<i className={"fa datastore-hamburger " + (this.state.status ? "fa-chevron-left" : "fa-chevron-right")} style={this.getStyle().iconStyle} aria-hidden="true" onClick={this.handleDataStorView.bind(this)}></i>)}
       </div>
     );
   }
@@ -83,18 +85,8 @@ export default class DataStoreView extends React.Component {
   getStyle() {
     return {
       iconStyle: {
-        fontSize:"36px",
-        color: "#FFF",
-        position: "absolute",
-        right: this.state.status ? "-35px" : undefined,
-        left: this.state.status ? undefined : "10px",
-        top: "10px",
-        color: "black",
-        background: "#FAFAFA",
-        padding: "5px 6px",
-        fontSize: "20px",
-        borderRadius: "50%",
-        cursor: "pointer"
+        left: !this.state.status ? "0px" : undefined,
+        right: !this.state.status ? undefined : "-20px"
       }
     };
   }
