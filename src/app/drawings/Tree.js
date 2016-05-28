@@ -159,7 +159,8 @@ class Tree {
       }
       newProps[key] = value;
     });
-    let step = (timeElapsed / 16) * ((Math.PI / 80) % Math.PI);
+    // let step = (timeElapsed / 16) * ((Math.PI / 80) % Math.PI);
+    let step = 0;
     this.drawTree(ctx, newProps, newProps.x, newProps.y, newProps.initialAngle, 
       newProps.height / 4, step, newProps.maxDepth);
   }

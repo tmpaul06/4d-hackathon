@@ -66,18 +66,32 @@ export default class SideMenu extends React.Component {
     let currentLayer = this.props.currentLayer;
     let shapes = currentLayer.shapes || [];
     return (
-      <div className="sidemenu">
+      <div className="sidemenu" style={{
+        display: this.state.hide ? "none" : "block"
+      }}>
+        <span style={{
+          float: "right",
+          fontSize: 10,
+        }} onClick={() =>
+          this.setState({
+            hide: true
+          })
+        }>HIDE</span>
         <div>
           LAYERS
         </div>
         <ul className="stack">
           {layers.map((layer, i) => {
             return (
-              <li style={{
-                minHeight: 100
-              }} className="stack-item" key={i}>
-                <i onClick={() => this.props.toggleLayerVisibility(i)} className="fa fa-eye"/>
-                <span onClick={() => this.props.setCurrentLayer(i)}>{"Layer " + layer.id}</span>
+              <li className="stack-item" key={i}>
+                <ListBindingDroppable
+                  updateShapes={(shapes) => this.props.updateLayer(layer, shapes, true)}
+                  template={this.state.selectedTemplate}/>
+                <i onClick={() => this.props.toggleLayerVisibility(i)}
+                  className={layer.visible ? "fa fa-eye" : "fa fa-eye-slash"}/>
+                <span style={{
+                  margin: "0px 10px"
+                }} onClick={() => this.props.setCurrentLayer(i)}>{layer.constructor.name}</span>
               </li>
             );
           })}
@@ -104,12 +118,6 @@ export default class SideMenu extends React.Component {
               </li>
             );
           })}
-          <div>
-            SHAPELIST
-            <ListBindingDroppable
-              updateShapes={(shapes) => this.props.updateLayer(currentLayer, shapes, true)}
-              template={this.state.selectedTemplate}/>
-          </div>
         </ul>
       </div>
     );

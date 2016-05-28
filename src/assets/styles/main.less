@@ -14,9 +14,8 @@ html, body {
 }
 
 body {
-  margin: 0 !important;
-  font-size: 16px !important;
-  font-family: proxima_nova_rgregular !important;
+  margin: 0;
+  font-family: Roboto;
 }
 
 .container {
@@ -197,12 +196,15 @@ li.stack-item {
 
     & canvas {
       background: transparent;
+      display: block;
     }
 }
 
 .stack-attr {
   margin: 5px 10px;
   display: inline-block;
+  max-height: 40px;
+  overflow: hidden;
 }
 
 .range-slider {
@@ -261,6 +263,12 @@ li.stack-item {
   z-index:10;
 }
 
+.datastore-container {
+  ul {
+    margin: 0px !important;
+  }
+}
+
 .highlight-droppable {
   .binding-droppable {
     color: #0F75CA !important;
@@ -306,7 +314,7 @@ li.stack-item {
 
 
   .product-card-container {
-    background: #F3F2F2;
+    background: #FFFFFF;
     padding: 15px;
     text-align: center;
     display: flex;
@@ -318,23 +326,90 @@ li.stack-item {
 
   .product-image {
     margin: auto;
+
+    &.template1 {
+      background-size: contain !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
   }
 
   .product-title {
     font-size: 16px;
-    margin: auto;
+    margin: 15px;
   }
 
   .product-description {
-    margin: auto;
+    margin: 20px auto;
+    text-align: justify;
     font-size: 12px;
     color: #868686;
   }
 }
 
-.stupid {
-  display: block !important;
-  max-width: 4000px !important;
-  max-height: 2000px !important;
-  transform: none !important;
+
+.product-page-tab {
+    padding: 10px;
+    border: 1px solid #E8E8E8;
+    color: #0095FF;
+    box-shadow: 0px 2px 7px rgba(128, 128, 128, 0.37);
+    display: inline-block;
+    margin: 0px 5px;
+    cursor: pointer;
+
+    &.selected {
+      background: #1E7DD0;
+      border: 1px solid #1D76C1;
+      color: #FFFFFF;
+    }
+}
+
+.vector-heading {
+    color: orange;
+    font-family: roboto;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.datastore-hamburger {
+    font-size: 16px;
+    color: black;
+    position: absolute;
+    top: 0px;
+    padding: 7px 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: rgb(250, 250, 250);
+    border: 1px solid #C1C1C1;
+}
+
+.vector-desc {
+  
+    font-family: roboto;
+    font-size: 14px;
+    color: gray
+}
+
+.datastore-view > ul {
+  background: transparent !important;
+}
+
+
+.no-top-margin {
+  .datastore-view {
+    top: 0px;
+  }
+  .sidemenu {
+    top: 0px;
+  }
+}
+
+.play-btn {
+  position: absolute;
+  z-index: 22;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.34);
+  padding: 10px 11px;
+  top: 5px;
+  border-radius: 50%;
 }

@@ -1,6 +1,9 @@
 export default {
   random,
-  randomInt
+  randomInt,
+  cos,
+  sin,
+  floor: Math.floor
 };
 
 function seed(s) {
@@ -26,3 +29,11 @@ export function random(a, b) {
 export function randomInt(a, b) {
   return Math.floor(Math.random() * (b - a)) + a;
 };
+
+export function cos(a) {
+  return Math.cos(a);
+}
+
+export function sin(a) {
+  return Math.sin(a);
+}
